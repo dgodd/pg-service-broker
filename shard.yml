@@ -1,0 +1,14 @@
+name: pg-service-broker
+version: 0.1.0
+
+authors:
+  - Steel Toe Team <steeltoe@pivotal.io>
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: sdogruyol/kemal
+    branch: master
+  pg:
+    github: will/crystal-pg
