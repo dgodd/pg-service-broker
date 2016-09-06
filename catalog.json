@@ -3,16 +3,17 @@
     {
       "id": "[REPLACE SERVICE_UUID]",
       "name": "WhaleDB",
-      "description": "Provides a postgresql instance",
+      "description": "Provides a PostgreSQL instance",
       "bindable": true,
       "tags": [
-        "postgres"
+        "postgres",
+        "postgresql"
       ],
       "metadata": {
-        "displayName": "Postgresql",
+        "displayName": "WhaleDB",
         "imageUrl": "http://logonoid.com/images/postgresql-logo.png",
         "longDescription": "Binding an app returns a url",
-        "providerDisplayName": "PostgreSQL",
+        "providerDisplayName": "WhaleDB",
         "documentationUrl": "https://github.com/dgodd/pg-service-broker",
         "supportUrl": "https://github.com/dgodd/pg-service-broker"
       },

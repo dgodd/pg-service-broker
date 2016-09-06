@@ -4,15 +4,15 @@ After pushing this app to Cloud Foundry, it will create and return databases (on
 
 ## Broker Setup
 
-* Copy settings.json.sample to settings.json and edit it.
-* Edit manifest.yml, and then:
+* Review catalog.json
+* Set environment variables in manifest.yml, then:
 
 ```
 cf push
-cf create-service-broker whale-postgres admin password http://[ABOVE HOST] --space-scoped
+cf create-service-broker whale-db admin password https://[ABOVE HOST] --space-scoped
 ```
 
 ## App Setup
 ```
-cf create-service whale-postgres public myPostgres
+cf create-service WhaleDB public myPostgres
 ```

@@ -1,6 +1,6 @@
 ---
 applications:
-- name: pg-service-broker-crystal
+- name: whale-db
   memory: 256M
   buildpack: https://github.com/crystal-lang/heroku-buildpack-crystal.git
   random-route: true
