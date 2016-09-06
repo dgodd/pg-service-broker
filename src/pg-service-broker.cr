@@ -49,6 +49,7 @@ put "/v2/service_instances/:name/service_bindings/:sbid" do |env|
 end
 
 delete "/v2/service_instances/:name/service_bindings/:sbid" do |env|
+  env.response.status_code = 200
   "{}"
 end
 
@@ -57,9 +58,10 @@ delete "/v2/service_instances/:name" do |env|
   name = "db" + Crypto::MD5.hex_digest(name)
 
   begin
+    DB.exec("SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname='#{name}'")
     DB.exec("DROP DATABASE #{name}")
     DB.exec("DROP USER #{name}")
-    env.response.status_code = 201
+    env.response.status_code = 200
     "{}"
   rescue e
     env.response.status_code = 502
