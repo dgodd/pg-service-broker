@@ -1,0 +1,42 @@
+{
+  "services": [
+    {
+      "id": "[REPLACE SERVICE_UUID]",
+      "name": "WhaleDB",
+      "description": "Provides a postgresql instance",
+      "bindable": true,
+      "tags": [
+        "postgres"
+      ],
+      "metadata": {
+        "displayName": "Postgresql",
+        "imageUrl": "http://logonoid.com/images/postgresql-logo.png",
+        "longDescription": "Binding an app returns a url",
+        "providerDisplayName": "PostgreSQL",
+        "documentationUrl": "https://github.com/dgodd/pg-service-broker",
+        "supportUrl": "https://github.com/dgodd/pg-service-broker"
+      },
+      "plans": [
+        {
+          "id": "[REPLACE PLAN_UUID]",
+          "name": "public",
+          "description": "A database",
+          "metadata": {
+            "bullets": [
+              "pg database"
+            ],
+            "costs": [
+              {
+                "amount": {
+                  "usd": 0
+                },
+                "unit": "MONTHLY"
+              }
+            ],
+            "displayName": "Public"
+          }
+        }
+      ]
+    }
+  ]
+}

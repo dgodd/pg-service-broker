@@ -9,6 +9,6 @@ license: MIT
 dependencies:
   kemal:
     github: sdogruyol/kemal
-    branch: master
   pg:
     github: will/crystal-pg
+    version: 0.9.1

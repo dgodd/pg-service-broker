@@ -1,3 +1,4 @@
-/settings.json.sample
 /.shards/
 /libs/
+.DS_Store
+.envrc

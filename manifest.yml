@@ -4,3 +4,9 @@ applications:
   memory: 256M
   buildpack: https://github.com/crystal-lang/heroku-buildpack-crystal.git
   random-route: true
+  env:
+    USERNAME:
+    PASSWORD:
+    PG_HOST:
+    PG_USERNAME:
+    PG_PASSWORD:
