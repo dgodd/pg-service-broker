@@ -9,10 +9,19 @@ After pushing this app to Cloud Foundry, it will create and return databases (on
 
 ```
 cf push
-cf create-service-broker whale-db admin password https://[ABOVE HOST] --space-scoped
+cf create-service-broker WhaleDB admin password https://[ABOVE HOST] --space-scoped
 ```
 
 ## App Setup
 ```
 cf create-service WhaleDB public myPostgres
+```
+
+## Delete Service
+
+Sometimes it is hard to delete a service since others are using it, to force delete:
+
+```
+cf purge-service-offering WhaleDB
+cf delete-service-broker WhaleDB
 ```
