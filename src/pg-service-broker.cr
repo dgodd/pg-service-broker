@@ -2,15 +2,7 @@ require "kemal"
 require "pg"
 require "json"
 
-VCAP = JSON.parse(ENV["VCAP_APPLICATION"])
-CATALOG = JSON.parse(File.read("catalog.json")).tap do |catalog|
-  catalog["services"].each do |service|
-    service.as_h["id"] = Crypto::MD5.hex_digest("#{VCAP["application_id"]}:service")
-    service["plans"].each do |plan|
-      plan.as_h["id"] = Crypto::MD5.hex_digest("#{VCAP["application_id"]}:plan")
-    end
-  end
-end
+CATALOG = JSON.parse(File.read("catalog.json"))
 DATABASE_URL = "postgres://#{ENV["PG_USERNAME"]}:#{ENV["PG_PASSWORD"]}@#{ENV["PG_HOST"]}/postgres"
 DB = PG.connect(DATABASE_URL)
 
@@ -21,7 +13,17 @@ before_all do |env|
 end
 
 get "/v2/catalog" do |env|
-  CATALOG.to_json
+  host = env.request.headers["Host"] || "unknown"
+  space = host.match(/whale-db-([^\.]+)\./).try { |x| x[1] } || ""
+  CATALOG.tap do |catalog|
+    catalog["services"].each do |service|
+      service.as_h["id"] = Crypto::MD5.hex_digest("#{host}:service")
+      service.as_h["name"] = "WhaleDB#{space}"
+      service["plans"].each do |plan|
+        plan.as_h["id"] = Crypto::MD5.hex_digest("#{host}:plan")
+      end
+    end
+  end.to_json
 end
 
 put "/v2/service_instances/:name" do |env|
