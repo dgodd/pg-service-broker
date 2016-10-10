@@ -2,15 +2,23 @@ version: 1.0
 shards:
   kemal:
     github: sdogruyol/kemal
-    version: 0.15.1
+    version: 0.16.0
 
   kilt:
     github: jeromegn/kilt
     version: 0.3.3
 
+  multipart:
+    github: RX14/multipart.cr
+    version: 0.1.0
+
   pg:
     github: will/crystal-pg
     version: 0.9.1
+
+  pool:
+    github: ysbaddaden/pool
+    version: 0.2.3
 
   radix:
     github: luislavena/radix

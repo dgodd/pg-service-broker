@@ -1,11 +1,13 @@
 require "kemal"
-require "pg"
 require "json"
+require "pg"
+require "pool/connection"
 
 CATALOG = JSON.parse(File.read("catalog.json"))
 DATABASE_URL = "postgres://#{ENV["PG_USERNAME"]}:#{ENV["PG_PASSWORD"]}@#{ENV["PG_HOST"]}/postgres"
-DB = PG.connect(DATABASE_URL)
-
+pg = ConnectionPool.new(capacity: 5, timeout: 0.1) do
+  PG.connect(DATABASE_URL)
+end
 
 Kemal.config.add_handler Kemal::Middleware::HTTPBasicAuth.new(ENV["USERNAME"], ENV["PASSWORD"])
 before_all do |env|
@@ -32,9 +34,11 @@ put "/v2/service_instances/:name" do |env|
   # { "a" => "postgres://#{ENV["PG_USERNAME"]}:#{ENV["PG_PASSWORD"]}@#{ENV["PG_HOST"]}:5432/postgres", "name" => name }.to_json
 
   begin
-    DB.exec("CREATE USER #{name} WITH PASSWORD '#{name}'")
-    DB.exec("CREATE DATABASE #{name}")
-    DB.exec("GRANT ALL PRIVILEGES ON DATABASE #{name} TO #{name}")
+    pg.connection do |conn|
+      conn.exec("CREATE USER #{name} WITH PASSWORD '#{name}'")
+      conn.exec("CREATE DATABASE #{name}")
+      conn.exec("GRANT ALL PRIVILEGES ON DATABASE #{name} TO #{name}")
+    end
     env.response.status_code = 201
     {"dashboard_url" => "postgres://#{name}:#{name}@#{ENV["PG_HOST"]}:5432/#{name}"}.to_json
   rescue e
@@ -60,9 +64,11 @@ delete "/v2/service_instances/:name" do |env|
   name = "db" + Crypto::MD5.hex_digest(name)
 
   begin
-    DB.exec("SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname='#{name}'")
-    DB.exec("DROP DATABASE #{name}")
-    DB.exec("DROP USER #{name}")
+    pg.connection do |conn|
+      conn.exec("SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname='#{name}'")
+      conn.exec("DROP DATABASE #{name}")
+      conn.exec("DROP USER #{name}")
+    end
     env.response.status_code = 200
     "{}"
   rescue e

@@ -12,3 +12,5 @@ dependencies:
   pg:
     github: will/crystal-pg
     version: 0.9.1
+  pool:
+    github: ysbaddaden/pool
